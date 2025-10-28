@@ -27,3 +27,16 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(messages);
 }
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+
+  const message = await prisma.message.create({
+    data: {
+      content: body.content,
+      conversationId: body.conversationId,
+    },
+  });
+
+  return NextResponse.json(message);
+}

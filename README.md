@@ -371,3 +371,15 @@ Proposer une architecture claire et extensible, facilement maintenable.
 
 Souhaites-tu que je te rédige aussi la structure de la base de données Prisma (schema.prisma avec les modèles User, Conversation, Message, Tag, etc.) ?
 Ce serait la suite logique pour poser les bases du développement.
+
+# TODO
+
+**Step 1**
+
+- create route POST messages (add new message into conversation)
+- Create service to call POST messages request
+- Create componant MessageForm
+
+**Step 2**
+
+- Refetch MessageList after new message is added

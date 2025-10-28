@@ -1,3 +1,5 @@
+import { MessageDTO } from "@/types/message.type";
+
 interface FetchMessageParams {
   conversationId?: string;
 }
@@ -20,8 +22,23 @@ export async function fetchMessages(params?: FetchMessageParams) {
   return response.json();
 }
 
+export async function createMessage(messageDTO: MessageDTO) {
+  const response = await fetch("/api/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(messageDTO),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create message");
+  }
+  return response.json();
+}
+
 const MessageService = {
   fetchMessages,
+  createMessage,
 };
 
 export default MessageService;
