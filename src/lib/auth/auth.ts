@@ -8,6 +8,8 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
+        // Better Auth utilise automatiquement bcrypt pour hasher les mots de passe
+        // Vous n'avez pas besoin de le faire manuellement
     },
     advanced: {
         useSecureCookies: process.env.NODE_ENV === "production",
