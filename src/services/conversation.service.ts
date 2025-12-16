@@ -1,3 +1,5 @@
+import { ConversationWithExtend } from "@/types/conversation.type";
+
 async function fetchConversations() {
   const response = await fetch("/api/conversations");
   if (!response.ok) {
@@ -24,10 +26,43 @@ async function deleteById(id: string) {
   return response.json();
 }
 
+async function createConversation(data: ConversationWithExtend) {
+  const response = await fetch("/api/conversations", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create conversation");
+  }
+  return response.json();
+}
+
+async function updateById(
+  id: string,
+  data: Partial<Pick<ConversationWithExtend, "title">>
+) {
+  const response = await fetch(`/api/conversations/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update conversation");
+  }
+  return response.json();
+}
+
 const ConversationService = {
   fetchConversations,
   fetchConversationById,
   deleteById,
+  createConversation,
+  updateById,
 };
 
 export default ConversationService;

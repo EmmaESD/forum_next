@@ -8,12 +8,14 @@ import { MessageDTO } from "@/types/message.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useSession } from "@/hooks/use-session";
 
 interface MessageFormProps {
   conversationId: string;
 }
 
 export default function MessageForm({ conversationId }: MessageFormProps) {
+  const { user } = useSession();
   const { register, handleSubmit, watch, reset } = useForm<MessageDTO>();
   const queryClient = useQueryClient();
 
@@ -22,6 +24,7 @@ export default function MessageForm({ conversationId }: MessageFormProps) {
       await MessageService.createMessage({
         ...data,
         conversationId,
+        authorId: user?.id || "",
       });
     },
     onSuccess: () => {
@@ -50,7 +53,10 @@ export default function MessageForm({ conversationId }: MessageFormProps) {
         type="submit"
         className="absolute top-1/2 right-0 -translate-y-1/2 mr-2"
         disabled={
-          !contentWatch || contentWatch.trim() === "" || mutation.isPending
+          !contentWatch ||
+          contentWatch.trim() === "" ||
+          mutation.isPending ||
+          !user?.id
         }
       >
         {mutation.isPending && <Spinner className="mr-2" />}

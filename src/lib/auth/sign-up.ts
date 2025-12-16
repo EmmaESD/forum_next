@@ -16,7 +16,6 @@ export async function signUp(email: string, password: string, name?: string) {
         return {
             success: false,
             error: error instanceof Error ? error.message : "Une erreur est survenue lors de l'inscription"
-            // tes test test
         };
     }
 }

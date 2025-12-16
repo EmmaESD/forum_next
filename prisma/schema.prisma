@@ -11,7 +11,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // Connection URLs are no longer supported in schema files (Prisma v7+).
+  // Move your DATABASE_URL for Migrate to prisma.config.ts and pass either
+  // `adapter` for a direct DB connection or `accelerateUrl` for Accelerate to
+  // the PrismaClient constructor. See: https://pris.ly/d/config-datasource
 }
 
 model Conversation {
@@ -24,6 +27,9 @@ model Conversation {
   updatedAt  DateTime? @updatedAt
   deletedAt  DateTime?
   archivedAt DateTime?
+  authorId   String
+  author     User      @relation(fields: [authorId], references: [id])
+
 
   @@map("conversation")
 }
@@ -39,6 +45,8 @@ model Message {
 
   Conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String?
+  authorId       String
+  author         User          @relation(fields: [authorId], references: [id])
 
   @@map("message")
 }
@@ -57,6 +65,8 @@ model User {
   image         String?
   sessions      Session[]
   accounts      Account[]
+  conversations Conversation[]
+  messages      Message[]
 
   @@map("user")
 }

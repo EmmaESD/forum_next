@@ -31,10 +31,20 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
+  const { content, conversationId, authorId } = body;
+
+  if (!content || !conversationId || !authorId) {
+    return NextResponse.json(
+      { error: "content, conversationId and authorId are required" },
+      { status: 400 }
+    );
+  }
+
   const message = await prisma.message.create({
     data: {
-      content: body.content,
-      conversationId: body.conversationId,
+      content,
+      conversationId,
+      authorId,
     },
   });
 

@@ -2,6 +2,7 @@ import MessageForm from "@/components/app/message/MessageForm";
 import MessageList from "@/components/app/message/MessageList";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ConversationTitleEditor from "@/components/app/conversation/ConversationTitleEditor";
 
 interface ConversationDetailPageProps {
   params: Promise<{ id: string }>;
@@ -12,8 +13,9 @@ export default async function ConversationDetailPage({
 }: ConversationDetailPageProps) {
   const { id } = await params;
 
-  console.log("Conversation ID:", id);
-  const response = await fetch(`http://localhost:3000/api/conversations/${id}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/conversations/${id}`, {
+    cache: "no-store",
+  });
   const conversation = await response.json();
 
   return (
@@ -26,7 +28,11 @@ export default async function ConversationDetailPage({
 
       <div className="bg-amber-100 p-4 rounded-md text-xl flex items-center gap-2">
         Subject:
-        <h1>{conversation?.title}</h1>
+        <ConversationTitleEditor
+          id={conversation.id}
+          title={conversation.title}
+          authorId={conversation.authorId}
+        />
       </div>
 
       <div>
